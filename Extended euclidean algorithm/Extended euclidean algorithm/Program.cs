@@ -14,26 +14,52 @@ namespace Kek
 
             while (true)
             {
+                string flag = "";
+
+                while (!Equals(flag, "1") && !Equals(flag, "2"))
+                {
+                    Console.Write("Для выбора 1 примера введите 1.\nДля выбора 2 примера, введите 2.\n\nВвод: ");
+                    flag = Console.ReadLine();
+
+                    if ((Equals(flag, "1") || Equals(flag, "2")))
+                    {
+                        Console.WriteLine("\nВыбран пример {0}\n", flag);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\nОшибка: неверно заданы данные\n");
+                    }
+
+                }
+
                 int a, b;
 
-                Console.WriteLine("Введите целое большее число\n");
+                Console.Write("Введите первое число: ");
                 string inputA = Console.ReadLine();
 
-                Console.WriteLine("Введите второе целое число\n");
+                Console.Write("\nВведите второе число: ");
                 string inputB = Console.ReadLine();
 
-                if (Int32.TryParse(inputA, out a) && (Int32.TryParse(inputB, out b)) && (a > b))
+                if (Int32.TryParse(inputA, out a) && (Int32.TryParse(inputB, out b)) && (a != b))
                 {
-                    EOA(a, b);
+                    if (a < b)
+                    {
+                        int c = a;
+                        a = b;
+                        b = c;
+                    }
+
+                    EOA(a, b, flag);
                 }
                 else
                 {
-                    Console.WriteLine("Ошибка: неверно заданы данные");
+                    Console.WriteLine("\nОшибка: неверно заданы данные\n");
                 }
             }
         }
 
-        static void EOA(int aA, int bB)
+        static void EOA(int aA, int bB, string flag)
         {
             List<int> A = new List<int>() { aA };
             List<int> B = new List<int>() { bB };
@@ -76,14 +102,17 @@ namespace Kek
             }
 
 
-            Console.WriteLine("A\t B\t A mod B\t A div B\t x\t y\t");
+            Console.WriteLine("\nA\t B\t A mod B\t A div B\t x\t y\t\n-----------------------------------------------------------");
             for (int i = 0; i < B.Count(); i++)
             {
                 Console.WriteLine("{0}\t {1}\t {2}\t\t {3}\t\t {4}\t {5}\t", A[i], B[i], mod[i], div[i], x[i], y[i]);
             }
 
-            Console.WriteLine("{0}*{1} + {2}*{3} = {4}", A[0], x[0], B[0], y[0], B[B.Count - 1]);
-
+            if (Equals(flag, "1"))
+                Console.WriteLine("{0}*{1} + {2}*{3} = {4}", A[0], x[0], B[0], y[0], B[B.Count - 1]);
+            else
+                Console.WriteLine("d = y mod phi(n) = {0} mod {1} = {2}", y[0], A[0], (y[0] % A[0]));
+            Console.WriteLine("\nДля завершения работы программы нажмите любую клавишу");
             Console.ReadKey();
             System.Environment.Exit(0);
         }
